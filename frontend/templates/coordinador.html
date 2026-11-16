@@ -1,0 +1,53 @@
+{% extends "base_app.html" %}
+
+{% block titulo %}Coordinación · Mesa de servicios de soporte{% endblock %}
+{% block rol %}Coordinación{% endblock %}
+
+{% block contenido %}
+  <main class="contenedor">
+    <nav class="tabs" aria-label="Secciones">
+      <button type="button" class="tab activa" data-tab="por-asignar">Por asignar</button>
+      <button type="button" class="tab" data-tab="por-cerrar">Por cerrar</button>
+      <button type="button" class="tab" data-tab="todos">Todos los casos</button>
+      <button type="button" class="tab" data-tab="consolidado">Consolidado</button>
+      <button type="button" id="btn-actualizar" class="btn-sec">Actualizar</button>
+    </nav>
+
+    <section id="panel-por-asignar" class="tarjeta">
+      <div class="titulo-fila"><h2>Casos reportados sin técnico</h2></div>
+      <div id="lista-por-asignar"></div>
+    </section>
+
+    <section id="panel-por-cerrar" class="tarjeta" hidden>
+      <div class="titulo-fila"><h2>Casos terminados por el técnico</h2></div>
+      <div id="lista-por-cerrar"></div>
+    </section>
+
+    <section id="panel-todos" class="tarjeta" hidden>
+      <div class="titulo-fila">
+        <h2>Todos los casos</h2>
+        <select id="filtro-estado" aria-label="Filtrar por estado">
+          <option value="">Todos los estados</option>
+          {% for valor, etiqueta in estados.items() %}
+            <option value="{{ valor }}">{{ etiqueta }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div id="lista-todos"></div>
+    </section>
+
+    <section id="panel-consolidado" hidden>
+      <div id="resumen" class="metricas"></div>
+      <div class="tarjeta">
+        <h2>Casos abiertos</h2>
+        <div id="tabla-abiertos"></div>
+      </div>
+      <div class="tarjeta" style="margin-top: 1rem">
+        <h2>Casos cerrados</h2>
+        <div id="tabla-cerrados"></div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/coordinador.js"></script>{% endblock %}
