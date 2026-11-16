@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block titulo %}Ingreso · Mesa de servicios de soporte{% endblock %}
+{% block clase_body %}pagina-login{% endblock %}
+
+{% block cuerpo %}
+  <main class="login-caja">
+    <h1>Mesa de servicios de soporte tecnológico</h1>
+    <p class="sub">Ingrese con su correo y contraseña.</p>
+    <form id="form-login" novalidate>
+      <label for="correo">Correo</label>
+      <input id="correo" type="email" autocomplete="username" required>
+      <label for="clave">Contraseña</label>
+      <input id="clave" type="password" autocomplete="current-password" required>
+      <p id="login-error" class="error" hidden></p>
+      <button type="submit" id="btn-login">Ingresar</button>
+    </form>
+  </main>
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/login.js"></script>{% endblock %}

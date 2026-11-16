@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+  <header class="barra">
+    <h1>Mesa de soporte · {% block rol %}{% endblock %}</h1>
+    <div class="sesion">
+      <span id="usuario-nombre"></span>
+      <button type="button" id="btn-salir" class="btn-sec">Salir</button>
+    </div>
+  </header>
+
+  {% block contenido %}{% endblock %}
+
+  <dialog id="dlg-detalle">
+    <div class="dlg-cabecera">
+      <h2 id="dlg-titulo">Caso</h2>
+      <button type="button" id="btn-volver" class="btn-sec">Volver</button>
+    </div>
+    <div id="dlg-cuerpo"></div>
+  </dialog>
+  <div id="toast" class="toast" hidden></div>
+{% endblock %}

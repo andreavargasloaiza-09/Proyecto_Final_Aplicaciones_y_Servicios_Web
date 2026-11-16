@@ -1,0 +1,163 @@
+/* Mesa de servicios de soporte tecnológico — estilos compartidos por todas las páginas */
+:root {
+  --fondo: #f3f4f6;
+  --tarjeta: #ffffff;
+  --texto: #111827;
+  --tenue: #6b7280;
+  --borde: #d1d5db;
+  --primario: #1d4ed8;
+  --primario-osc: #1e40af;
+  --peligro: #b91c1c;
+  --ok: #15803d;
+  --radio: 10px;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.45;
+}
+
+h1, h2, h3 { margin: 0 0 .5rem; line-height: 1.2; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1rem; margin-top: 1.25rem; }
+small, .tenue { color: var(--tenue); }
+
+/* ---------- barra superior ---------- */
+.barra {
+  background: var(--primario);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: .75rem 1.25rem;
+}
+.barra h1 { font-size: 1.1rem; margin: 0; }
+.barra .sesion { display: flex; align-items: center; gap: .75rem; font-size: .9rem; }
+
+.contenedor { max-width: 1150px; margin: 1.25rem auto; padding: 0 1rem; }
+.dos-col { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 1rem; align-items: start; }
+@media (max-width: 860px) { .dos-col { grid-template-columns: 1fr; } }
+
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1.1rem 1.25rem;
+}
+.titulo-fila { display: flex; justify-content: space-between; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.titulo-fila .controles { display: flex; gap: .5rem; align-items: center; }
+
+/* ---------- formularios ---------- */
+label { display: block; font-weight: 600; font-size: .9rem; margin: .75rem 0 .25rem; }
+input, select, textarea {
+  width: 100%;
+  font: inherit;
+  padding: .5rem .65rem;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  background: #fff;
+}
+textarea { resize: vertical; }
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+.bloque { margin-top: 1rem; padding-top: .25rem; border-top: 1px solid var(--borde); }
+td select { width: auto; min-width: 9rem; padding: .3rem .4rem; }
+
+/* ---------- botones ---------- */
+button {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: .5rem .9rem;
+  border: 1px solid var(--primario);
+  border-radius: 8px;
+  background: var(--primario);
+  color: #fff;
+  margin-top: .75rem;
+}
+button:hover { background: var(--primario-osc); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+.btn-sec { background: #fff; color: var(--primario); margin-top: 0; }
+.btn-sec:hover { background: #eff6ff; }
+.btn-peligro { background: var(--peligro); border-color: var(--peligro); }
+.btn-peligro:hover { background: #991b1b; }
+.barra .btn-sec { color: #fff; background: transparent; border-color: rgba(255,255,255,.7); }
+.barra .btn-sec:hover { background: rgba(255,255,255,.15); }
+td button, .titulo-fila button { margin-top: 0; padding: .3rem .65rem; font-size: .85rem; }
+
+/* ---------- mensajes ---------- */
+.error { color: var(--peligro); font-size: .9rem; margin: .5rem 0 0; }
+.aviso { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: .6rem .8rem; margin-top: 1rem; }
+.vacio { color: var(--tenue); text-align: center; padding: 1.5rem 0; }
+.toast {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 100;
+  max-width: min(420px, 92vw);
+  padding: .75rem 1rem; border-radius: 8px; color: #fff; font-size: .95rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.toast-ok { background: var(--ok); }
+.toast-error { background: var(--peligro); }
+
+/* ---------- tablas ---------- */
+.tabla-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--tenue); white-space: nowrap; }
+td.acciones { white-space: nowrap; }
+td.acciones > * { margin-right: .3rem; }
+
+/* ---------- etiquetas de estado ---------- */
+.badge { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.badge-reportado { background: #e5e7eb; color: #374151; }
+.badge-asignado { background: #dbeafe; color: #1e40af; }
+.badge-en_reparacion { background: #ffedd5; color: #9a3412; }
+.badge-terminado { background: #ede9fe; color: #5b21b6; }
+.badge-cerrado { background: #dcfce7; color: #166534; }
+
+/* ---------- pestañas ---------- */
+.tabs { display: flex; gap: .25rem; border-bottom: 2px solid var(--borde); margin-bottom: 1rem; flex-wrap: wrap; }
+.tab { margin: 0 0 -2px; background: transparent; color: var(--tenue); border: 0; border-bottom: 3px solid transparent; border-radius: 0; padding: .6rem 1rem; }
+.tab:hover { background: #e5e7eb; }
+.tab.activa { color: var(--primario); border-bottom-color: var(--primario); }
+.tabs .btn-sec { margin-left: auto; align-self: center; }
+
+/* ---------- métricas del consolidado ---------- */
+.metricas { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .75rem; margin-bottom: 1rem; }
+.metrica { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: .75rem; text-align: center; }
+.metrica .num { display: block; font-size: 1.7rem; font-weight: 800; }
+.metrica small { display: block; }
+
+/* ---------- detalle del caso (ventana) ---------- */
+dialog { border: 0; border-radius: 12px; padding: 0; width: min(780px, 94vw); max-height: 90vh; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+dialog[open] { display: flex; flex-direction: column; }
+dialog::backdrop { background: rgba(17, 24, 39, .55); }
+.dlg-cabecera { display: flex; justify-content: space-between; align-items: center; padding: .9rem 1.25rem; border-bottom: 1px solid var(--borde); }
+.dlg-cabecera h2 { margin: 0; }
+.dlg-cabecera button { margin-top: 0; }
+#dlg-cuerpo { padding: 1rem 1.25rem 1.5rem; overflow-y: auto; }
+
+.detalle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .75rem 1.25rem; }
+.etq { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; color: var(--tenue); }
+.texto { white-space: pre-wrap; margin: .25rem 0 0; }
+
+.historial { list-style: none; margin: .5rem 0 0; padding: 0; border-left: 3px solid var(--borde); }
+.historial li { position: relative; padding: 0 0 .9rem 1rem; }
+.historial li::before { content: ""; position: absolute; left: -8px; top: .35rem; width: 11px; height: 11px; border-radius: 50%; background: var(--primario); }
+.historial .cabecera-ev { font-size: .85rem; color: var(--tenue); }
+.historial .tipo-ev { font-weight: 700; color: var(--texto); }
+
+/* ---------- pantalla de ingreso ---------- */
+.pagina-login { display: grid; place-items: center; min-height: 100vh; padding: 1rem; }
+.login-caja { width: min(400px, 100%); background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 14px; padding: 1.75rem; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+.login-caja h1 { font-size: 1.35rem; }
+.login-caja .sub { color: var(--tenue); margin: .25rem 0 1rem; }
+.login-caja button { width: 100%; margin-top: 1.25rem; }
