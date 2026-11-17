@@ -8,7 +8,7 @@
 |---|---|
 | **Nombre del proyecto** | Mesa de Servicios de Soporte Tecnológico (API REST + Interfaz Web) |
 | **Problema seleccionado** | Gestión integral del ciclo de vida de reportes e incidentes de soporte técnico (registro, asignación, atención, historial de intervenciones, cierre y calificación del servicio) con control de acceso basado en roles (*Solicitante*, *Técnico* y *Coordinador*) y persistencia relacional. |
-| **Integrantes y contribución** | **Trabajo en conjunto:** Levantamiento de requerimientos y entrevista con el docente, análisis y redacción de `docs/requisitos.md`, `docs/diseno.md`, matriz de trazabilidad (`trazabilidad.md`) y consolidación final del `README.md` (**PR #5**).<br>**Andrea Vargas Loaiza:** Arquitectura del backend en FastAPI, modelado relacional y persistencia en SQLite (`mesa_soporte.db`), autenticación JWT con *scopes* por rol, datos iniciales (`seed.py`) y desarrollo de endpoints REST (**PR #1** y **PR #2**).<br>**Samuel Montoya Galeano:** Desarrollo completo de la interfaz web del lado del cliente (`login`, vistas de *Solicitante*, *Técnico* y *Coordinador*), integración con la API REST mediante tokens JWT (**PR #3** y **PR #4**), ejecución y documentación de pruebas funcionales (`CP-01` a `CP-12`). |
+| **Integrantes y contribución** | **Trabajo en conjunto:** Levantamiento de requerimientos y entrevista con el docente, análisis y redacción de docs/requisitos.md, docs/diseno.md, matriz de trazabilidad (trazabilidad.md) y consolidación final del README.md (**PR #5**).<br>**Andrea Vargas Loaiza:** Arquitectura del backend en FastAPI, modelado relacional y persistencia en SQLite (mesa_soporte.db), autenticación JWT con *scopes* por rol, datos iniciales (seed.py) y desarrollo de endpoints REST (**PR #1** y **PR #2**).<br>**Samuel Montoya Galeano:** Desarrollo completo de la interfaz web del lado del cliente (login, vistas de *Solicitante*, *Técnico* y *Coordinador*), integración con la API REST mediante tokens JWT (**PR #3** y **PR #4**), ejecución y documentación de pruebas funcionales (CP-01 a CP-12). |
 | **Asignatura** | Aplicaciones y Servicios Web |
 | **Fecha** | 17 de noviembre de 2026 |
 | **Enlace al repositorio** | [https://github.com/andreavargasloaiza-09/Proyecto_Final_Aplicaciones_y_Servicios_Web](https://github.com/andreavargasloaiza-09/Proyecto_Final_Aplicaciones_y_Servicios_Web) |
@@ -32,20 +32,20 @@ Actualmente, los reportes llegan por correo electrónico, llamadas y comunicacio
 * **Coordinación de soporte:** Responsable de organizar la atención asignando técnicos a los casos reportados, ejecutar el cierre definitivo de los reportes terminados y consultar el estado consolidado general de la operación.
 
 ### Alcance aprobado, solución y restricciones
-* **Alcance funcional (`RF-01` a `RF-11` y `CA-01` a `CA-06`):** Registro validado de reportes por categoría, flujo de estados controlado (`reportado` → `asignado` → `en_reparacion` → `terminado` → `cerrado`), bitácora cronológica de intervenciones, cierre definitivo sin reapertura, calificación del servicio (1 a 5) y consulta consolidada para coordinación.
-* **Resumen de la solución:** Aplicación web cliente-servidor con una **API REST** desarrollada en **Python (FastAPI)** y base de datos relacional **SQLite** (`mesa_soporte.db`), integrada mediante tokens **JWT** con control de permisos por rol y propiedad del caso a una **interfaz web** con vistas diferenciadas para *Solicitante*, *Técnico* y *Coordinador*.
+* **Alcance funcional (RF-01 a RF-11 y CA-01 a CA-06):** Registro validado de reportes por categoría, flujo de estados controlado (reportado → asignado → en_reparacion → terminado → cerrado), bitácora cronológica de intervenciones, cierre definitivo sin reapertura, calificación del servicio (1 a 5) y consulta consolidada para coordinación.
+* **Resumen de la solución:** Aplicación web cliente-servidor con una **API REST** desarrollada en **Python (FastAPI)** y base de datos relacional **SQLite** (mesa_soporte.db), integrada mediante tokens **JWT** con control de permisos por rol y propiedad del caso a una **interfaz web** con vistas diferenciadas para *Solicitante*, *Técnico* y *Coordinador*.
 
 * **Restricciones del sistema:**
-  * Arquitectura obligatoria dividida en interfaz web (frontend), API REST (backend) y base de datos relacional (`SQLite`) sobre servidor local `Uvicorn`.
-  * Prohibición de subir credenciales reales o archivos `.env` al repositorio; las llaves secretas de JWT (`SECRET_KEY`) deben gestionarse mediante variables de entorno (`.env.example`).
+  * Arquitectura obligatoria dividida en interfaz web (frontend), API REST (backend) y base de datos relacional (SQLite) sobre servidor local Uvicorn.
+  * Prohibición de subir credenciales reales o archivos .env al repositorio; las llaves secretas de JWT (SECRET_KEY) deben gestionarse mediante variables de entorno (.env.example).
   * Uso exclusivo de datos ficticios de prueba para proteger la privacidad institucional.
 
-**Especificación detallada:** [Consultar documento de requisitos (`docs/requisitos.md`)](docs/requisitos.md)
+**Especificación detallada:** [Consultar documento de requisitos (docs/requisitos.md)](docs/requisitos.md)
 
 ## 3. Requisitos y alcance
 
 ### Método utilizado para obtener la información
-Para el levantamiento y validación de requisitos se aplicó una **entrevista semiestructurada en dos fases** (preguntas iniciales y refinamiento de ambigüedades) con el docente **Juan Carlos Morales Guerra**, complementada con el análisis del contexto operativo y la definición de reglas de negocio (`RN-01` a `RN-06`).
+Para el levantamiento y validación de requisitos se aplicó una **entrevista semiestructurada en dos fases** (preguntas iniciales y refinamiento de ambigüedades) con el docente **Juan Carlos Morales Guerra**, complementada con el análisis del contexto operativo y la definición de reglas de negocio (RN-01 a RN-06).
 
 ---
 
@@ -60,27 +60,27 @@ Para el levantamiento y validación de requisitos se aplicó una **entrevista se
 ![Evidencia entrevista docente 2](evidencias/entrevista_3.png)
 
 **Decisiones clave confirmadas durante la validación:**
-* **Datos obligatorios y categorización:** Todo reporte debe capturar descripción del fallo, placa del equipo o recurso, teléfono, nombre del solicitante, área y una categoría que distinga el tipo de caso (`RN-01`, `RN-02`).
-* **Flujo lineal y cierre definitivo:** El ciclo de vida es estrictamente secuencial: `Reportado` → `Asignado` (por coordinación) → `En reparación` (por el técnico) → `Terminado` (por el técnico con respuesta) → `Cerrado` (por coordinación). Un caso cerrado no puede reabrirse bajo ninguna circunstancia (`RN-03`, `RN-05`).
-* **Gestión de casos erróneos o duplicados:** No se eliminan físicamente de la base de datos; el coordinador los cierra dejando una observación explicativa (`RN-05`).
-* **Asignación y trazabilidad técnica:** Únicamente el coordinador asigna un técnico responsable (`RN-04`), y solo el técnico asignado registra notas de intervención con fecha/hora y descripción sin sobrescribir el historial previo (`RF-05`).
-* **Satisfacción y vista consolidada:** Una vez cerrado el caso, se habilita la calificación del servicio (1 a 5) para el solicitante (`RF-11`), y coordinación dispone de un reporte consolidado de casos abiertos y cerrados (`RF-09`).
+* **Datos obligatorios y categorización:** Todo reporte debe capturar descripción del fallo, placa del equipo o recurso, teléfono, nombre del solicitante, área y una categoría que distinga el tipo de caso (RN-01, RN-02).
+* **Flujo lineal y cierre definitivo:** El ciclo de vida es estrictamente secuencial: `Reportado` → `Asignado` (por coordinación) → `En reparación` (por el técnico) → `Terminado` (por el técnico con respuesta) → `Cerrado` (por coordinación). Un caso cerrado no puede reabrirse bajo ninguna circunstancia (RN-03, RN-05).
+* **Gestión de casos erróneos o duplicados:** No se eliminan físicamente de la base de datos; el coordinador los cierra dejando una observación explicativa (RN-05).
+* **Asignación y trazabilidad técnica:** Únicamente el coordinador asigna un técnico responsable (RN-04), y solo el técnico asignado registra notas de intervención con fecha/hora y descripción sin sobrescribir el historial previo (RF-05).
+* **Satisfacción y vista consolidada:** Una vez cerrado el caso, se habilita la calificación del servicio (1 a 5) para el solicitante (RF-11), y coordinación dispone de un reporte consolidado de casos abiertos y cerrados (RF-09).
 
 ---
 
 ### Requisitos priorizados, historias de usuario y criterios de aceptación
 
-El desarrollo se priorizó en tres fases secuenciales para garantizar el cumplimiento de las **Condiciones de Aceptación Obligatorias (`CA-01` a `CA-06`)**:
+El desarrollo se priorizó en tres fases secuenciales para garantizar el cumplimiento de las **Condiciones de Aceptación Obligatorias (CA-01 a CA-06)**:
 
 | Fase / Prioridad | Historias de Usuario | Requisitos Asociados | Criterios de Aceptación y Condición Obligatoria |
 |---|---|---|---|
-| **Fase 1:** Cimientos y Seguridad *(Prioridad Crítica)* | **HU-01:** Autenticación y Autorización | `RF-10`, `RNF-01`, `RNF-02`, `RNF-04`, `RNF-05`, `RNF-06` | **Base de Seguridad:** Valida correo y contraseña, emite token JWT con `id` y `scopes` por rol, y rechaza accesos sin token o sin permisos (`401`/`403`). |
-| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-02:** Registro de un caso | `RF-01`, `RF-02`, `RNF-03` | **Cubre CA-01:** Exige los 5 datos obligatorios + categoría, asigna estado inicial `"reportado"`, rechaza datos incompletos (`422`) y persiste el caso (`201`). |
-| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-03:** Asignación de casos | `RF-03`, `RF-04` | **Cubre CA-02 y CA-03:** Solo el coordinador asigna un técnico válido, vincula `tecnico_id` y pasa el estado de `"reportado"` a `"asignado"`. |
-| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-04:** Seguimiento e intervenciones | `RF-05` | **Cubre CA-04:** Solo el técnico asignado registra notas de intervención con fecha/hora sin borrar ni sobrescribir registros anteriores. |
-| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-05:** Gestión y finalización técnica | `RF-06` | **Cubre CA-02 y CA-05 (parcial):** El técnico asignado transita el caso a `"en_reparacion"` y luego a `"terminado"` con su respuesta; no puede cerrarlo. |
-| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-07:** Cierre definitivo y satisfacción | `RF-07`, `RF-08`, `RF-11` | **Cubre CA-05:** Solo coordinación pasa el caso a `"cerrado"` con observación; se bloquean cambios futuros y se habilita la calificación (1–5) al solicitante. |
-| **Fase 3:** Integración y Cierre *(Prioridad Media)* | **HU-06:** Visión consolidada | `RF-08`, `RF-09` | **Cubre CA-03 y CA-06:** Coordinación visualiza el resumen global de casos abiertos y cerrados con ID, estado, solicitante y técnico responsable. |
+| **Fase 1:** Cimientos y Seguridad *(Prioridad Crítica)* | **HU-01:** Autenticación y Autorización | RF-10, RNF-01, RNF-02, RNF-04, RNF-05, RNF-06 | **Base de Seguridad:** Valida correo y contraseña, emite token JWT con id y scopes por rol, y rechaza accesos sin token o sin permisos (401/403). |
+| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-02:** Registro de un caso | RF-01, RF-02, RNF-03 | **Cubre CA-01:** Exige los 5 datos obligatorios + categoría, asigna estado inicial "reportado", rechaza datos incompletos (422) y persiste el caso (201). |
+| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-03:** Asignación de casos | RF-03, RF-04 | **Cubre CA-02 y CA-03:** Solo el coordinador asigna un técnico válido, vincula tecnico_id y pasa el estado de "reportado" a "asignado". |
+| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-04:** Seguimiento e intervenciones | RF-05 | **Cubre CA-04:** Solo el técnico asignado registra notas de intervención con fecha/hora sin borrar ni sobrescribir registros anteriores. |
+| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-05:** Gestión y finalización técnica | RF-06 | **Cubre CA-02 y CA-05 (parcial):** El técnico asignado transita el caso a "en_reparacion" y luego a "terminado" con su respuesta; no puede cerrarlo. |
+| **Fase 2:** Núcleo del Negocio *(Prioridad Alta)* | **HU-07:** Cierre definitivo y satisfacción | RF-07, RF-08, RF-11 | **Cubre CA-05:** Solo coordinación pasa el caso a "cerrado" con observación; se bloquean cambios futuros y se habilita la calificación (1–5) al solicitante. |
+| **Fase 3:** Integración y Cierre *(Prioridad Media)* | **HU-06:** Visión consolidada | RF-08, RF-09 | **Cubre CA-03 y CA-06:** Coordinación visualiza el resumen global de casos abiertos y cerrados con ID, estado, solicitante y técnico responsable. |
 
 ### Exclusiones explícitas del alcance
 * Envío de notificaciones por correo electrónico corporativo o mensajería (WhatsApp/SMS).
@@ -144,7 +144,7 @@ uvicorn src.main:app --reload
 - Aplicación web: <http://127.0.0.1:8000/>
 - Documentación interactiva de la API: <http://127.0.0.1:8000/docs>
 
-Usuarios ficticios (todos usan la clave que definan en `DEMO_PASSWORD` dentro de su `.env`):
+Usuarios ficticios (todos usan la clave que definan en DEMO_PASSWORD dentro de su .env):
 
 | Rol | Correo |
 |---|---|
@@ -152,20 +152,20 @@ Usuarios ficticios (todos usan la clave que definan en `DEMO_PASSWORD` dentro de
 | Técnico | tecnico1@demo.test, tecnico2@demo.test |
 | Solicitante | solicitante1@demo.test, solicitante2@demo.test |
 
-Para reiniciar los datos de prueba: `python seed.py --reset` (desde `backend/`).
+Para reiniciar los datos de prueba: python seed.py --reset (desde backend/).
 
 ### Errores frecuentes al arrancar
 
 | Mensaje | Causa y solución |
 |---|---|
-| `No module named 'app'` | Se usó el comando antiguo. El correcto es `uvicorn src.main:app --reload` |
-| `No module named 'src'` | La terminal no está en `backend/`. Ejecute `cd backend` primero |
-| `SECRET_KEY` o `DEMO_PASSWORD` faltante | Falta esa línea en el `.env` de la raíz del repositorio |
-| `No module named 'jinja2'` (u otro paquete) | Ejecute `pip install -r requirements.txt` con el entorno virtual activo |
+| No module named 'app' | Se usó el comando antiguo. El correcto es uvicorn src.main:app --reload |
+| No module named 'src' | La terminal no está en backend/. Ejecute cd backend primero |
+| SECRET_KEY o DEMO_PASSWORD faltante | Falta esa línea en el .env de la raíz del repositorio |
+| No module named 'jinja2' (u otro paquete) | Ejecute pip install -r requirements.txt con el entorno virtual activo |
 
 ## 6. Servicios web implementados
 
-Documentación interactiva: `/docs`. Todas las rutas, salvo el inicio de sesión, exigen el token JWT.
+Documentación interactiva: /docs. Todas las rutas, salvo el inicio de sesión, exigen el token JWT.
 
 | Método | Ruta | Descripción | Requisito relacionado |
 |---|---|---|---|
@@ -288,9 +288,9 @@ Códigos de respuesta: 200/201 éxito · 401 sin sesión válida · 403 sin perm
 **Matriz de trazabilidad completa:** [Consultar `docs/trazabilidad.md`](docs/trazabilidad.md)
 
 ### Cómo reproducir las pruebas funcionales
-1. **Preparar estado limpio de la base de datos:** Ejecutar `python seed.py --reset` dentro de `backend/` e iniciar el servidor con `uvicorn src.main:app --reload`.
-2. **Pruebas de API y reglas de negocio (`CP-01` a `CP-11`):** Abrir **Swagger UI** en <http://127.0.0.1:8000/docs>, autenticarse mediante el botón **Authorize** con el usuario correspondiente (`solicitante1@demo.test`, `solicitante2@demo.test`, `tecnico1@demo.test`, `tecnico2@demo.test` o `coordinador@demo.test`) y ejecutar cada endpoint siguiendo el orden secuencial de la tabla.
-3. **Prueba de integración extremo a extremo (`CP-12`):** Abrir la interfaz web en <http://127.0.0.1:8000/> desde el navegador, operar los formularios con JWT activo y verificar la persistencia en SQLite.
+1. **Preparar estado limpio de la base de datos:** Ejecutar python seed.py --reset dentro de backend/ e iniciar el servidor con uvicorn src.main:app --reload.
+2. **Pruebas de API y reglas de negocio (CP-01 a CP-11):** Abrir **Swagger UI** en <http://127.0.0.1:8000/docs>, autenticarse mediante el botón **Authorize** con el usuario correspondiente (solicitante1@demo.test, solicitante2@demo.test, tecnico1@demo.test, tecnico2@demo.test o coordinador@demo.test) y ejecutar cada endpoint siguiendo el orden secuencial de la tabla.
+3. **Prueba de integración extremo a extremo (CP-12):** Abrir la interfaz web en <http://127.0.0.1:8000/> desde el navegador, operar los formularios con JWT activo y verificar la persistencia en SQLite.
 
 ### Tabla de pruebas funcionales de API, reglas de negocio e integración
 
@@ -439,7 +439,7 @@ Códigos de respuesta: 200/201 éxito · 401 sin sesión válida · 403 sin perm
 ## 8. Control de versiones
 
 * **Repositorio oficial:** `https://github.com/andreavargasloaiza-09/Proyecto_Final_Aplicaciones_y_Servicios_Web`
-* **Flujo de trabajo aplicado:** Desarrollo basado en ramas por funcionalidad (*feature branches*) integradas a la rama principal `main` mediante revisión por Pull Requests (`PR #1` a `PR #4`).
+* **Flujo de trabajo aplicado:** Desarrollo basado en ramas por funcionalidad (*feature branches*) integradas a la rama principal `main` mediante revisión por Pull Requests (PR #1 a PR #4).
 
 ### Pull Requests, ramas y commits relevantes
 
@@ -449,39 +449,39 @@ Códigos de respuesta: 200/201 éxito · 401 sin sesión válida · 403 sin perm
 | **PR #2** – Consultas, historial y consolidado | Backend (`backend/src/`) | `f92c9d2` | Implementación de consultas filtradas por rol (`GET /api/reportes/{id}`), bitácora cronológica (`GET /api/reportes/{id}/historial`), encuesta de calificación (`POST /api/reportes/{id}/calificacion`) y resumen gerencial (`GET /api/consolidado`). |
 | **PR #3** – Vistas base y formulario de reporte | Frontend (`frontend/`) | `501791f`, `f37b1a0` | Maquetación de plantillas HTML (`login`, `solicitante`, `tecnico`, `coordinador`), estilos CSS y consumo inicial de autenticación JWT y creación de reportes. |
 | **PR #4** – Integración completa de flujos web | Frontend (`frontend/`) | `04b519f`, `d9d27b3` | Integración extremo a extremo en JavaScript (`solicitante.js`, `tecnico.js`, `coordinador.js`, `ui.js`) de asignación de técnicos, gestión de estados, historial de intervenciones, cierre, calificación y vista consolidada. |
-| **PR #5** – Documentación final, evidencias y trazabilidad | Documentación (`README.md`, `docs/`, `evidencias/`) | *(commit de cierre)* | Consolidación del `README.md` final, matriz de trazabilidad (`trazabilidad.md`) y carga de evidencias gráficas de entrevista y pruebas funcionales (`CP-01` a `CP-12`). |
+|**PR #5** – Documentación final, matrices y evidencias de pruebas | Documentación (`README.md`, `trazabilidad.md`, `evidencias/`) | `9ce4774` | Consolidación del `README.md` final, matriz de trazabilidad (`trazabilidad.md`) y carga de evidencias gráficas de entrevista y pruebas funcionales (`CP-01` a `CP-12`). |
 
 ### Resumen verificable de aportes por integrante
 
 * **Trabajo en conjunto (Samuel Montoya Galeano y Andrea Vargas Loaiza):**
   * Levantamiento de requerimientos y entrevista con el docente.
-  * Análisis, especificación y redacción de los documentos `docs/requisitos.md`, `docs/diseno.md`, `trazabilidad.md`, etc.
-  * Redacción, estructuración y consolidación final del `README.md` (**PR #5**).
+  * Análisis, especificación y redacción de los documentos docs/requisitos.md, docs/diseno.md, trazabilidad.md, etc.
+  * Redacción, estructuración y consolidación final del README.md (**PR #5**).
 
 * **Andrea Vargas Loaiza (Desarrollo Backend y Base de Datos):**
-  * Arquitectura del backend en FastAPI, modelado de base de datos relacional en SQLite (`mesa_soporte.db`), script de datos iniciales (`seed.py`) y configuración de seguridad con tokens JWT y *scopes*.
+  * Arquitectura del backend en FastAPI, modelado de base de datos relacional en SQLite (mesa_soporte.db), script de datos iniciales (seed.py) y configuración de seguridad con tokens JWT y *scopes*.
   * Implementación de todos los endpoints REST y reglas de negocio del ciclo de vida de reportes (**PR #1** y **PR #2**).
 
 * **Samuel Montoya Galeano (Desarrollo Frontend y Pruebas):**
-  * Desarrollo completo de la interfaz web (`frontend/templates/` y `frontend/static/js/`) e integración cliente-servidor mediante tokens JWT (**PR #3** y **PR #4**).
-  * Diseño, ejecución, captura de evidencias y documentación de las 12 pruebas funcionales de API, reglas de negocio e integración (`CP-01` a `CP-12`).
+  * Desarrollo completo de la interfaz web (frontend/templates/ y frontend/static/js/) e integración cliente-servidor mediante tokens JWT (**PR #3** y **PR #4**).
+  * Diseño, ejecución, captura de evidencias y documentación de las 12 pruebas funcionales de API, reglas de negocio e integración (CP-01 a CP-12).
 
 
 ## 9. Conclusiones y limitaciones
 ### Cumplimiento de las condiciones del problema
-* **Cobertura total de requisitos y condiciones obligatorias:** Se implementó y verificó el 100 % de las historias de usuario (`HU-01` a `HU-07`), requisitos funcionales (`RF-01` a `RF-11`), requisitos no funcionales (`RNF-01` a `RNF-06`) y condiciones de aceptación obligatorias (`CA-01` a `CA-06`), respaldados por la ejecución aprobada de las 12 pruebas funcionales (`CP-01` a `CP-12`).
-* **Centralización y trazabilidad verificable:** La solución reemplaza la gestión informal por un registro unificado en base de datos relacional (`SQLite`), garantizando que cada reporte tenga un responsable identificable, un estado operativo claro (`reportado` → `asignado` → `en_reparacion` → `terminado` → `cerrado`), una bitácora cronológica inalterable de intervenciones técnicas y una vista consolidada para coordinación.
+* **Cobertura total de requisitos y condiciones obligatorias:** Se implementó y verificó el 100 % de las historias de usuario (HU-01 a HU-07), requisitos funcionales (RF-01 a RF-11), requisitos no funcionales (RNF-01 a RNF-06) y condiciones de aceptación obligatorias (CA-01 a CA-06), respaldados por la ejecución aprobada de las 12 pruebas funcionales (CP-01 a CP-12).
+* **Centralización y trazabilidad verificable:** La solución reemplaza la gestión informal por un registro unificado en base de datos relacional (SQLite), garantizando que cada reporte tenga un responsable identificable, un estado operativo claro (`reportado` → `asignado` → `en_reparacion` → `terminado` → `cerrado`), una bitácora cronológica inalterable de intervenciones técnicas y una vista consolidada para coordinación.
 * **Integración cliente-servidor funcional:** La interfaz web desacoplada por roles (*Solicitante*, *Técnico* y *Coordinador*) se comunica de forma efectiva con la API REST en FastAPI mediante autenticación basada en tokens JWT.
 
 ### Dificultades técnicas verificadas y soluciones aplicadas
-* **Control granular de propiedad sobre los recursos:** Más allá de validar el rol general en el token JWT (*scopes*), era necesario impedir que un técnico interviniera casos asignados a otro compañero o que un solicitante consultara o calificara reportes ajenos. **Solución:** Se implementaron validaciones cruzadas en la capa de servicios (`services/reportes.py`) comparando el `id` del usuario autenticado contra `solicitante_id` y `tecnico_id`, respondiendo de forma controlada con `403 Forbidden`.
-* **Consistencia de la máquina de estados y bloqueo tras el cierre:** Garantizar que no ocurrieran saltos inválidos de estado ni modificaciones posteriores al cierre definitivo (`RN-03`, `RN-05`). **Solución:** Se encapsularon las reglas de transición en `utils/reglas.py`, bloqueando cualquier edición o nueva intervención una vez el reporte alcanza el estado `cerrado`.
-* **Gestión de sesiones y enrutamiento por rol en el frontend:** Mantener la sesión activa entre vistas HTML estáticas (`login`, `solicitante`, `tecnico`, `coordinador`) y manejar respuestas de error de la API sin romper la experiencia de usuario. **Solución:** Se centralizó el consumo HTTP en JavaScript adjuntando automáticamente la cabecera `Authorization: Bearer <token>`, validando la sesión contra `GET /api/auth/me` y mostrando mensajes claros ante errores `401`, `403`, `404`, `409` y `422`.
+* **Control granular de propiedad sobre los recursos:** Más allá de validar el rol general en el token JWT (*scopes*), era necesario impedir que un técnico interviniera casos asignados a otro compañero o que un solicitante consultara o calificara reportes ajenos. **Solución:** Se implementaron validaciones cruzadas en la capa de servicios (services/reportes.py) comparando el id del usuario autenticado contra solicitante_id y tecnico_id, respondiendo de forma controlada con 403 Forbidden.
+* **Consistencia de la máquina de estados y bloqueo tras el cierre:** Garantizar que no ocurrieran saltos inválidos de estado ni modificaciones posteriores al cierre definitivo (RN-03, RN-05). **Solución:** Se encapsularon las reglas de transición en utils/reglas.py, bloqueando cualquier edición o nueva intervención una vez el reporte alcanza el estado cerrado.
+* **Gestión de sesiones y enrutamiento por rol en el frontend:** Mantener la sesión activa entre vistas HTML estáticas (login, solicitante, tecnico, coordinador) y manejar respuestas de error de la API sin romper la experiencia de usuario. **Solución:** Se centralizó el consumo HTTP en JavaScript adjuntando automáticamente la cabecera Authorization: Bearer <token>, validando la sesión contra GET /api/auth/me y mostrando mensajes claros ante errores 401, 403, 404, 409 y 422.
 
 ### Restricciones y limitaciones del sistema
 
 * **Comportamientos pendientes dentro del alcance aprobado:** No quedan funcionalidades pendientes dentro del alcance acordado; todos los flujos aprobados se encuentran operativos y probados.
 * **Limitaciones técnicas y operativas propias del alcance:**
-  * **Persistencia y despliegue local:** El sistema opera con SQLite (`mesa_soporte.db`) sobre servidor local `Uvicorn`, orientado a entornos de demostración y prueba institucional controlada.
-  * **Inmutabilidad de casos cerrados:** Por regla de negocio (`RN-05`), un caso cerrado no puede reabrirse ni eliminarse físicamente; los reportes duplicados o erróneos se gestionan mediante cierre administrativo con observación.
+  * **Persistencia y despliegue local:** El sistema opera con SQLite (mesa_soporte.db) sobre servidor local Uvicorn, orientado a entornos de demostración y prueba institucional controlada.
+  * **Inmutabilidad de casos cerrados:** Por regla de negocio (RN-05), un caso cerrado no puede reabrirse ni eliminarse físicamente; los reportes duplicados o erróneos se gestionan mediante cierre administrativo con observación.
   * **Integraciones externas excluidas:** Conforme a la delimitación aprobada, la solución no envía notificaciones automáticas por correo electrónico (SMTP) ni admite la carga de archivos adjuntos binarios en los reportes.

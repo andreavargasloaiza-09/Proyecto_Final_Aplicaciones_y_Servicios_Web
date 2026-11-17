@@ -160,12 +160,3 @@ Dado que el desarrollo se ejecutará y entregará en un único sprint final, el 
 * **Fase 1 (Cimientos):** Diseño de la base de datos (Modelos en SQLAlchemy), configuración de variables de entorno, y endpoints de Login (JWT).
 * **Fase 2 (Núcleo de Negocio):** CRUD del reporte de tickets, endpoint de asignación (Coordinador), endpoint de historial de intervenciones (Técnico), automatización de categorización y validaciones de *scopes* de la API.
 * **Fase 3 (Integración y Cierre):** Lógica de estados (`TERMINADO` → `CERRADO`), habilitación de la encuesta de satisfacción, vista consolidada en Angular y ejecución de las 12 pruebas obligatorias.
-
-## 10. Aprobación del docente
-
-| Campo | Valor |
-|---|---|
-| Docente | [completar] |
-| Fecha de revisión | [completar] |
-| Decisión | [ ] Aprobado  [ ] Aprobado con cambios  [ ] No aprobado |
-| Observaciones | [completar] |
