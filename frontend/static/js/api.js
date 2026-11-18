@@ -20,6 +20,11 @@ const ETIQUETAS_MOTIVO = {
   error: "Caso erróneo",
   duplicado: "Caso duplicado",
 };
+const ETIQUETAS_ROL = {
+  solicitante: "Solicitante",
+  tecnico: "Técnico",
+  coordinador: "Coordinador",
+};
 const PAGINAS_POR_ROL = {
   solicitante: "/solicitante",
   tecnico: "/tecnico",
@@ -38,6 +43,10 @@ const NOMBRES_CAMPO = {
   motivo: "Motivo",
   puntuacion: "Puntuación",
   comentario: "Comentario",
+  nombre: "Nombre",
+  correo: "Correo",
+  password: "Contraseña",
+  rol: "Rol",
 };
 
 class ErrorApi extends Error {
@@ -138,6 +147,13 @@ const API = {
   },
   tecnicos() {
     return peticion("GET", "/usuarios/tecnicos");
+  },
+  usuarios(filtros) {
+    const rol = filtros && filtros.rol ? "?rol=" + encodeURIComponent(filtros.rol) : "";
+    return peticion("GET", "/usuarios" + rol);
+  },
+  crearUsuario(datos) {
+    return peticion("POST", "/usuarios", datos);
   },
   listar(filtros) {
     const f = filtros || {};

@@ -10,6 +10,7 @@
       <button type="button" class="tab" data-tab="por-cerrar">Por cerrar</button>
       <button type="button" class="tab" data-tab="todos">Todos los casos</button>
       <button type="button" class="tab" data-tab="consolidado">Consolidado</button>
+      <button type="button" class="tab" data-tab="usuarios">Usuarios</button>
       <button type="button" id="btn-actualizar" class="btn-sec">Actualizar</button>
     </nav>
 
@@ -45,6 +46,45 @@
       <div class="tarjeta" style="margin-top: 1rem">
         <h2>Casos cerrados</h2>
         <div id="tabla-cerrados"></div>
+      </div>
+    </section>
+
+    <section id="panel-usuarios" class="dos-col" hidden>
+      <div class="tarjeta">
+        <h2>Crear un usuario</h2>
+        <form id="form-usuario" novalidate>
+          <label for="nuevo-nombre">Nombre completo</label>
+          <input id="nuevo-nombre" type="text" maxlength="120" required>
+
+          <label for="nuevo-correo">Correo</label>
+          <input id="nuevo-correo" type="email" maxlength="120" autocomplete="off" required>
+
+          <label for="nuevo-password">Contraseña inicial</label>
+          <input id="nuevo-password" type="password" maxlength="72" autocomplete="new-password" required placeholder="Mínimo 8 caracteres">
+
+          <label for="nuevo-rol">Rol</label>
+          <select id="nuevo-rol" required>
+            {% for valor, etiqueta in roles.items() %}
+              {% if valor != "coordinador" %}<option value="{{ valor }}">{{ etiqueta }}</option>{% endif %}
+            {% endfor %}
+          </select>
+
+          <p id="usuario-error" class="error" hidden></p>
+          <button type="submit">Crear usuario</button>
+        </form>
+        <p class="tenue">La persona ingresa con este correo y esta contraseña.</p>
+      </div>
+      <div class="tarjeta">
+        <div class="titulo-fila">
+          <h2>Usuarios registrados</h2>
+          <select id="filtro-rol" aria-label="Filtrar por rol">
+            <option value="">Todos los roles</option>
+            {% for valor, etiqueta in roles.items() %}
+              <option value="{{ valor }}">{{ etiqueta }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div id="lista-usuarios"></div>
       </div>
     </section>
   </main>

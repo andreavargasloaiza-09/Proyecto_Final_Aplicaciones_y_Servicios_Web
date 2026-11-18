@@ -11,7 +11,7 @@ import src.entities  # noqa: F401  (registra las tablas antes de crearlas)
 from src.utils.config import FRONTEND_DIR, settings
 from src.database.connection import Base, engine
 from src.utils.reglas import ErrorDeFlujo
-from src.endpoints import auth, catalogos, consolidado, paginas, reportes
+from src.endpoints import auth, catalogos, consolidado, paginas, reportes, usuarios
 
 logger = logging.getLogger("mesa_soporte")
 
@@ -54,6 +54,7 @@ app.include_router(auth.router)
 app.include_router(catalogos.router)
 app.include_router(reportes.router)
 app.include_router(consolidado.router)
+app.include_router(usuarios.router)
 
 # Frontend: pantallas HTML (plantillas Jinja2) y archivos estáticos (CSS y JavaScript).
 # Es opcional para ejecutar la API: si la carpeta frontend/ no está completa, la API funciona igual.
