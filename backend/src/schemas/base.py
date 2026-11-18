@@ -17,6 +17,7 @@ FechaUTC = Annotated[datetime, PlainSerializer(_a_iso_utc, return_type=str, when
 # Deben coincidir con utils/reglas.ESTADOS (se escriben aquí para que /docs muestre la lista desplegable)
 EstadoCaso = Literal["reportado", "asignado", "en_reparacion", "terminado", "cerrado"]
 GrupoCasos = Literal["abiertos", "cerrados"]
+RolUsuario = Literal["solicitante", "tecnico", "coordinador"]
 
 
 class EntradaBase(BaseModel):

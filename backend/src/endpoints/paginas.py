@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from src.utils.config import FRONTEND_DIR
-from src.utils.reglas import ETIQUETAS_ESTADO
+from src.utils.reglas import ETIQUETAS_ESTADO, ETIQUETAS_ROL
 
 templates = Jinja2Templates(directory=str(FRONTEND_DIR / "templates"))
 
@@ -19,9 +19,9 @@ router = APIRouter(tags=["Pantallas"], include_in_schema=False)
 
 
 def _pantalla(request: Request, plantilla: str):
-    # La lista de estados sale de reglas.py, así los filtros no se escriben dos veces.
+    # Las listas de estados y de roles salen de reglas.py, así los filtros no se escriben dos veces.
     return templates.TemplateResponse(
-        request=request, name=plantilla, context={"estados": ETIQUETAS_ESTADO}
+        request=request, name=plantilla, context={"estados": ETIQUETAS_ESTADO, "roles": ETIQUETAS_ROL}
     )
 
 

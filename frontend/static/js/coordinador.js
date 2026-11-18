@@ -5,17 +5,22 @@
  *   - revisar los casos terminados por el técnico y cerrarlos (RN-03, RN-05, HU-07)
  *   - ver todos los casos con su estado y responsable (CA-03)
  *   - consolidado de casos abiertos y cerrados (CA-06, HU-06)
+ *   - crear técnicos y solicitantes y ver los usuarios registrados (RF-12, HU-08)
  */
 
 (async function () {
   const sesion = iniciarPagina("coordinador");
   if (!sesion) return;
 
-  const PANELES = ["por-asignar", "por-cerrar", "todos", "consolidado"];
+  const PANELES = ["por-asignar", "por-cerrar", "todos", "consolidado", "usuarios"];
   const listaPorAsignar = document.getElementById("lista-por-asignar");
   const listaPorCerrar = document.getElementById("lista-por-cerrar");
   const listaTodos = document.getElementById("lista-todos");
+  const listaUsuarios = document.getElementById("lista-usuarios");
   const filtroEstado = document.getElementById("filtro-estado");
+  const filtroRol = document.getElementById("filtro-rol");
+  const formUsuario = document.getElementById("form-usuario");
+  const errorUsuario = document.getElementById("usuario-error");
   const titulo = document.getElementById("dlg-titulo");
   const cuerpo = document.getElementById("dlg-cuerpo");
   const pestanas = document.querySelectorAll(".tab");
@@ -34,11 +39,13 @@
   pestanas.forEach((t) => t.addEventListener("click", () => activarPestana(t.dataset.tab)));
   document.getElementById("btn-actualizar").addEventListener("click", () => cargarPestana());
   filtroEstado.addEventListener("change", () => cargarPestana());
+  filtroRol.addEventListener("change", () => cargarPestana());
 
   function cargarPestana() {
     if (pestanaActual === "por-asignar") return cargarPorAsignar();
     if (pestanaActual === "por-cerrar") return cargarPorCerrar();
     if (pestanaActual === "todos") return cargarTodos();
+    if (pestanaActual === "usuarios") return cargarUsuarios();
     return cargarConsolidado();
   }
 
@@ -167,6 +174,64 @@
       document.getElementById("resumen").innerHTML = '<p class="error">' + esc(e.message) + "</p>";
     }
   }
+
+  /* ---------------------------------------------------------- usuarios (RF-12) */
+  function tablaUsuarios(usuarios) {
+    if (!usuarios.length) return '<p class="vacio">No hay usuarios para mostrar.</p>';
+    const filas = usuarios
+      .map(
+        (u) =>
+          "<tr><td>" + esc(u.nombre) + "</td><td>" + esc(u.correo) + "</td><td>" +
+          esc(ETIQUETAS_ROL[u.rol] || u.rol) + "</td></tr>"
+      )
+      .join("");
+    return (
+      '<div class="tabla-scroll"><table><thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th></tr></thead><tbody>' +
+      filas + "</tbody></table></div>"
+    );
+  }
+
+  async function cargarUsuarios() {
+    try {
+      listaUsuarios.innerHTML = tablaUsuarios(await API.usuarios({ rol: filtroRol.value }));
+    } catch (e) {
+      listaUsuarios.innerHTML = '<p class="error">' + esc(e.message) + "</p>";
+    }
+  }
+
+  /** Validación en la interfaz (RNF-03); el servidor vuelve a validar todo. */
+  function validarUsuario(d) {
+    const errores = [];
+    if (d.nombre.length < 2) errores.push("Escriba el nombre (mínimo 2 caracteres).");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.correo)) errores.push("El correo no tiene un formato válido.");
+    if (d.password.length < 8) errores.push("La contraseña debe tener al menos 8 caracteres.");
+    if (!d.rol) errores.push("Seleccione el rol.");
+    return errores;
+  }
+
+  formUsuario.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    ocultar(errorUsuario);
+    const datos = {
+      nombre: document.getElementById("nuevo-nombre").value.trim(),
+      correo: document.getElementById("nuevo-correo").value.trim().toLowerCase(),
+      password: document.getElementById("nuevo-password").value,   // la contraseña no se recorta
+      rol: document.getElementById("nuevo-rol").value,
+    };
+    const errores = validarUsuario(datos);
+    if (errores.length) return mostrarError(errorUsuario, errores.join(" "));
+    await ejecutar(formUsuario.querySelector("button[type=submit]"), async () => {
+      try {
+        const usuario = await API.crearUsuario(datos);
+        avisar("Usuario " + usuario.nombre + " creado como " + (ETIQUETAS_ROL[usuario.rol] || usuario.rol).toLowerCase() + ".");
+        formUsuario.reset();
+        if (usuario.rol === "tecnico") tecnicos = await API.tecnicos();   // el nuevo técnico ya se puede asignar
+        await cargarUsuarios();
+      } catch (e) {
+        mostrarError(errorUsuario, e.message);
+      }
+    });
+  });
 
   /* ---------------------------------------------------------- clics de la página */
   document.addEventListener("click", async (ev) => {

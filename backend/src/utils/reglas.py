@@ -19,6 +19,7 @@ ROL_SOLICITANTE = "solicitante"
 ROL_TECNICO = "tecnico"
 ROL_COORDINADOR = "coordinador"
 ROLES = (ROL_SOLICITANTE, ROL_TECNICO, ROL_COORDINADOR)
+ETIQUETAS_ROL = {ROL_SOLICITANTE: "Solicitante", ROL_TECNICO: "Técnico", ROL_COORDINADOR: "Coordinador"}
 
 # ---------------------------------------------------------------- estados (RN-03)
 REPORTADO = "reportado"
@@ -68,6 +69,7 @@ SCOPES_POR_ROL = {
         "reportes:cerrar",       # la coordinación cierra los casos (RN-03, RN-05)
         "reportes:consolidado",
         "usuarios:listar",
+        "usuarios:crear",        # la coordinación crea técnicos y solicitantes (RF-12)
     ],
 }
 
@@ -81,7 +83,8 @@ DESCRIPCION_SCOPES = {
     "reportes:asignar": "Asignar técnico a un caso",
     "reportes:cerrar": "Cerrar casos",
     "reportes:consolidado": "Ver el consolidado de casos",
-    "usuarios:listar": "Listar técnicos",
+    "usuarios:listar": "Listar usuarios y técnicos",
+    "usuarios:crear": "Crear técnicos y solicitantes",
 }
 
 
